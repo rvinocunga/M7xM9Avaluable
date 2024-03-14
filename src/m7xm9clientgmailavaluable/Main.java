@@ -6,7 +6,10 @@ package m7xm9clientgmailavaluable;
  */
 public class Main {
     public static void main(String[] args) {
-        System.out.println("prueba");
+        
+        // JAR javamail + OK
+        // enviar mails con protocol SMTP
+        // consultar mails con protocol IMAP
     }
     
 }
