@@ -26,11 +26,18 @@ public class MenuPrincipal extends JFrame {
         menuBar.add(menu);
 
         // Icones per a les opcions de menú
-        ImageIcon actualizarIcon = new ImageIcon("imatges/actualitzar_icon.svg");
-        ImageIcon escriureIcon = new ImageIcon("imatges/escriure_icon.svg");
+        // actualitzar icon
+        ImageIcon actualizarIcon = new ImageIcon("imatges\\actualitzar_icon.jpg");
+        Image iconActualitzarEscalado = actualizarIcon.getImage().getScaledInstance(15, 15, java.awt.Image.SCALE_SMOOTH);
+        ImageIcon actualizarIconEscalado = new ImageIcon(iconActualitzarEscalado);
+
+        // escriure icon
+        ImageIcon escriureIcon = new ImageIcon("imatges\\escriure_icon.png");
+        Image iconEscriureEscalado = escriureIcon.getImage().getScaledInstance(15, 15, java.awt.Image.SCALE_SMOOTH);
+        ImageIcon escriureIconEscalado = new ImageIcon(iconEscriureEscalado);
 
         // Opció "Actualitzar" amb icona
-        JMenuItem actualizarMenuItem = new JMenuItem("Actualitzar", actualizarIcon);
+        JMenuItem actualizarMenuItem = new JMenuItem("Actualitzar", actualizarIconEscalado);
         actualizarMenuItem.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 // Codificar l'acció d'actualitzar el correu electrònic aquí
@@ -39,17 +46,56 @@ public class MenuPrincipal extends JFrame {
         menu.add(actualizarMenuItem);
 
         // Opció "Escriure" 
-        JMenuItem escriureMenuItem = new JMenuItem("Escriure", escriureIcon);
+        JMenuItem escriureMenuItem = new JMenuItem("Escriure", escriureIconEscalado);
         escriureMenuItem.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 EnviarMail enviarMail = new EnviarMail();
-                enviarMail.setModal(true);
+                enviarMail.setModal(false);
                 enviarMail.setVisible(true);
             }
         });
         menu.add(escriureMenuItem);
 
         setJMenuBar(menuBar);
+
+        // Crear el botón de alternancia para actualizar correos electrónicos
+        JToggleButton actualizarToggleButton = new JToggleButton(actualizarIconEscalado);
+        actualizarToggleButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                // Aquí puedes codificar la lógica para actualizar los correos electrónicos
+                if (actualizarToggleButton.isSelected()) {
+                    // Si el botón está seleccionado, entonces se debe actualizar
+                    // Coloca aquí tu lógica para actualizar los correos electrónicos
+                    System.out.println("Correos electrónicos actualizados");
+                } else {
+                    // Si el botón no está seleccionado, entonces cancela la actualización
+                    System.out.println("Actualización de correos electrónicos cancelada");
+                }
+            }
+        });
+
+        // Crear el botón de alternancia para actualizar correos electrónicos
+        JToggleButton escriureToggleButton = new JToggleButton(escriureIconEscalado);
+        escriureToggleButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                if (escriureToggleButton.isSelected()) {
+                    EnviarMail enviarMail = new EnviarMail();
+                    enviarMail.setModal(false);
+                    enviarMail.setVisible(true);
+                    System.out.println("Escribiendo");
+                } else {
+                    System.out.println("Cancelado");
+                }
+            }
+        });
+
+        // Agregar el botón de alternancia al panel
+        JPanel buttonPanel = new JPanel();
+        buttonPanel.add(actualizarToggleButton);
+        buttonPanel.add(escriureToggleButton);
+
+        // Añadir el panel al contenedor principal
+        add(buttonPanel, BorderLayout.NORTH);
 
         // Crear la JTree per a les carpetes
         // nodo raiz
@@ -62,7 +108,6 @@ public class MenuPrincipal extends JFrame {
         DefaultMutableTreeNode borrados = new DefaultMutableTreeNode("Esborrats");
 
         // agregar mails recibidos
-        
         // agregar sub nodos
         raiz.add(recibidos);
         raiz.add(borradores);
