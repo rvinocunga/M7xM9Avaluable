@@ -7,10 +7,12 @@ package m7xm9clientgmailavaluable;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import javax.swing.tree.DefaultMutableTreeNode;
+import javax.swing.tree.DefaultTreeModel;
 
 public class MenuPrincipal extends JFrame {
 
-    private JTree foldersTree;
+    private JTree arbre;
     private JTextArea emailContentTextArea;
 
     public MenuPrincipal() {
@@ -36,12 +38,13 @@ public class MenuPrincipal extends JFrame {
         });
         menu.add(actualizarMenuItem);
 
-        // Opció "Escriure" amb icona
+        // Opció "Escriure" 
         JMenuItem escriureMenuItem = new JMenuItem("Escriure", escriureIcon);
         escriureMenuItem.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                // Codificar l'acció d'escriure un nou correu electrònic aquí
-                // Podries obrir un nou JDialog per a la redacció del correu electrònic
+                EnviarMail enviarMail = new EnviarMail();
+                enviarMail.setModal(true);
+                enviarMail.setVisible(true);
             }
         });
         menu.add(escriureMenuItem);
@@ -49,8 +52,29 @@ public class MenuPrincipal extends JFrame {
         setJMenuBar(menuBar);
 
         // Crear la JTree per a les carpetes
-        foldersTree = new JTree();
-        JScrollPane treeScrollPane = new JScrollPane(foldersTree);
+        // nodo raiz
+        DefaultMutableTreeNode raiz = new DefaultMutableTreeNode("Correus");
+
+        // nodos (mails rebuts, esborranys, enviats, esborrats)
+        DefaultMutableTreeNode recibidos = new DefaultMutableTreeNode("Rebuts");
+        DefaultMutableTreeNode borradores = new DefaultMutableTreeNode("Esborranys");
+        DefaultMutableTreeNode enviados = new DefaultMutableTreeNode("Enviats");
+        DefaultMutableTreeNode borrados = new DefaultMutableTreeNode("Esborrats");
+
+        // agregar mails recibidos
+        
+        // agregar sub nodos
+        raiz.add(recibidos);
+        raiz.add(borradores);
+        raiz.add(enviados);
+        raiz.add(borrados);
+
+        // modelo del JTree
+        DefaultTreeModel modelo = new DefaultTreeModel(raiz);
+
+        arbre = new JTree(modelo);
+
+        JScrollPane treeScrollPane = new JScrollPane(arbre);
         treeScrollPane.setPreferredSize(new Dimension(200, 0));
         add(treeScrollPane, BorderLayout.WEST);
 
