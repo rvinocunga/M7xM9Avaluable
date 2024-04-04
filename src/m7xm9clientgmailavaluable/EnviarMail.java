@@ -2,10 +2,19 @@ package m7xm9clientgmailavaluable;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.*;
+import java.util.Properties;
+import javax.mail.Message;
+import javax.mail.MessagingException;
+import javax.mail.Session;
+import javax.mail.Transport;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMessage;
 import javax.swing.border.EmptyBorder;
 
 public class EnviarMail extends JDialog {
+
+    String user = "adam22rvinocunga@inslaferreria.cat";
+    String pwd = "xxx";
 
     private JTextField destinatarioField;
     private JTextField asuntoField;
@@ -40,34 +49,32 @@ public class EnviarMail extends JDialog {
         // field remitente
         destinatarioField = new JTextField(50);
         panel1.add(destinatarioField);
-        
-        
-        
+
         // Panel para el área de texto
         JPanel panel2 = new JPanel(new BorderLayout());
         panel2.setBorder(new EmptyBorder(10, 10, 10, 10));
-        
+
         JLabel labelCuerpo = new JLabel("Missatge: ");
         panel2.add(labelCuerpo, BorderLayout.NORTH);
         cuerpoTextArea = new JTextArea(10, 50);
         JScrollPane scrollPane = new JScrollPane(cuerpoTextArea);
         panel2.add(scrollPane, BorderLayout.CENTER);
-        
+
         add(panel2, BorderLayout.CENTER);
-        
+
         JPanel btns = new JPanel(new FlowLayout());
-        
+
         JButton btnEnviar = new JButton("Enviar");
         JButton btnAdjuntarFitxer = new JButton("Fitxer");
         JButton btnEsborrany = new JButton("Esborrany");
         btns.add(btnEnviar);
         btns.add(btnEsborrany);
-        
+
         add(btns, BorderLayout.SOUTH);
 
     }
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws MessagingException {
         EnviarMail app = new EnviarMail();
         app.setVisible(true);
     }
