@@ -9,5 +9,8 @@ package m7xm9clientgmailavaluable;
  * @author roger
  */
 class Email {
-    
+    private String remitente;
+    private String destinatario;
+    private String asunto;
+    private String mensaje;
 }

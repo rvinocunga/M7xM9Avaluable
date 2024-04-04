@@ -40,7 +40,7 @@ public class MenuPrincipal extends JFrame {
         JMenuItem actualizarMenuItem = new JMenuItem("Actualitzar", actualizarIconEscalado);
         actualizarMenuItem.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                // Codificar l'acció d'actualitzar el correu electrònic aquí
+                actualitzarCorreus();
             }
         });
         menu.add(actualizarMenuItem);
@@ -62,16 +62,15 @@ public class MenuPrincipal extends JFrame {
         JToggleButton actualizarToggleButton = new JToggleButton(actualizarIconEscalado);
         actualizarToggleButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                // Aquí puedes codificar la lógica para actualizar los correos electrónicos
+
                 if (actualizarToggleButton.isSelected()) {
-                    // Si el botón está seleccionado, entonces se debe actualizar
-                    // Coloca aquí tu lógica para actualizar los correos electrónicos
-                    System.out.println("Correos electrónicos actualizados");
+                    // actualizar
+                    actualitzarCorreus();
                 } else {
-                    // Si el botón no está seleccionado, entonces cancela la actualización
                     System.out.println("Actualización de correos electrónicos cancelada");
                 }
             }
+
         });
 
         // Crear el botón de alternancia para actualizar correos electrónicos
@@ -129,6 +128,10 @@ public class MenuPrincipal extends JFrame {
         add(contentScrollPane, BorderLayout.CENTER);
 
         setVisible(true);
+    }
+
+    protected void actualitzarCorreus() {
+        System.out.println("Actualizar correos...");
     }
 
     public static void main(String[] args) {
