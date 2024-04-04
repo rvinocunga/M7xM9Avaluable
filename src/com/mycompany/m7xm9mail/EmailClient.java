@@ -24,9 +24,9 @@ public class EmailClient {
     private Session session;
     private Store store;
     private String host = "imap.gmail.com"; // Canvia aquesta cadena pel teu servidor IMAP
-    private String username = "adam22jlin@inslaferreria.cat"; // Canvia pel teu correu electrònic
-    private String password = ""; // Canvia per la teva contrasenya
-    String directoryPath = "C:\\Users\\jiaqi\\Desktop\\AdjuntsEmail"; // Definició de la ruta on vols desar els adjunts
+    private String username = "adam22rvinocunga@inslaferreria.cat"; // Canvia pel teu correu electrònic
+    private String password = "xxxz"; // Canvia per la teva contrasenya
+    String directoryPath = "..\\AdjuntsEmail"; // Definició de la ruta on vols desar els adjunts
 
     //Exemple directoris Enviats numero 15
     // Connectar-se al servidor IMAP
