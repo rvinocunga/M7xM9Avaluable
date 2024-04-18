@@ -4,9 +4,16 @@
  */
 package m7xm9clientgmailavaluable;
 
+import com.mycompany.m7xm9mail.EmailClient;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.mail.MessagingException;
+import javax.swing.event.TreeSelectionEvent;
+import javax.swing.event.TreeSelectionListener;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
 
@@ -15,10 +22,19 @@ public class MenuPrincipal extends JFrame {
     private JTree arbre;
     private JTextArea emailContentTextArea;
 
-    public MenuPrincipal() {
+    private List<String> folders;
+    private EmailClient em = new EmailClient();
+
+    public MenuPrincipal() throws MessagingException {
         setTitle("Client de correu electrònic");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(800, 600);
+
+        try {
+            em.connect("adam22rvinocunga@inslaferreria.cat", "xxx");
+        } catch (MessagingException ex) {
+            Logger.getLogger(MenuPrincipal.class.getName()).log(Level.SEVERE, null, ex);
+        }
 
         // Crear el menú
         JMenuBar menuBar = new JMenuBar();
@@ -100,23 +116,20 @@ public class MenuPrincipal extends JFrame {
         // nodo raiz
         DefaultMutableTreeNode raiz = new DefaultMutableTreeNode("Correus");
 
-        // nodos (mails rebuts, esborranys, enviats, esborrats)
-        DefaultMutableTreeNode recibidos = new DefaultMutableTreeNode("Rebuts");
-        DefaultMutableTreeNode borradores = new DefaultMutableTreeNode("Esborranys");
-        DefaultMutableTreeNode enviados = new DefaultMutableTreeNode("Enviats");
-        DefaultMutableTreeNode borrados = new DefaultMutableTreeNode("Esborrats");
+        // implementar las carpetas hijas que se reciben
+        folders = em.listFolders();
+        //System.out.println(folders); // Para comprobar que se reciben las carpetas correctamente
 
-        // agregar mails recibidos
-        // agregar sub nodos
-        raiz.add(recibidos);
-        raiz.add(borradores);
-        raiz.add(enviados);
-        raiz.add(borrados);
+        // Crear un nodo para cada carpeta y agregarlo como hijo del nodo raíz
+        for (String folderName : folders) {
+            DefaultMutableTreeNode folderNode = new DefaultMutableTreeNode(folderName);
+            raiz.add(folderNode);
+        }
 
         // modelo del JTree
         DefaultTreeModel modelo = new DefaultTreeModel(raiz);
-
         arbre = new JTree(modelo);
+        
 
         JScrollPane treeScrollPane = new JScrollPane(arbre);
         treeScrollPane.setPreferredSize(new Dimension(200, 0));
@@ -137,7 +150,11 @@ public class MenuPrincipal extends JFrame {
     public static void main(String[] args) {
         SwingUtilities.invokeLater(new Runnable() {
             public void run() {
-                new MenuPrincipal();
+                try {
+                    new MenuPrincipal();
+                } catch (MessagingException ex) {
+                    Logger.getLogger(MenuPrincipal.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
         });
     }

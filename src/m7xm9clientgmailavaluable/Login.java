@@ -1,14 +1,19 @@
 package m7xm9clientgmailavaluable;
 
+import com.mycompany.m7xm9mail.EmailClient;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Arrays;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.mail.MessagingException;
 import javax.swing.border.EmptyBorder;
 
 public class Login extends JDialog {
 
+    public static EmailClient em = new EmailClient();
     private JTextField correuElectronic;
     private JPasswordField contrasenya;
 
@@ -53,19 +58,19 @@ public class Login extends JDialog {
         btnIniciar.addActionListener(new ActionListener() {
 
             public void actionPerformed(ActionEvent e) {
-                String correu = correuElectronic.getText();
-                char[] password = contrasenya.getPassword();
-                char[] passwordCorrecta = new char[] {'1', '2', '3'};
+                try {
+                    if (em.connect(correuElectronic.getText(), contrasenya.getText())) {
+                        // Cerrar la ventana actual (Login)
+                        JDialog dialog = (JDialog) SwingUtilities.getWindowAncestor((Component) e.getSource());
+                        dialog.dispose();
 
-                if (correu.equals("") || password.length == 0) {
-                    System.out.println("Campos vacios");
-                } else {
-                    System.out.println(correu + ", " + password);
-                    if (Arrays.equals(password, passwordCorrecta)) {
-                        System.out.println("Contraseña correcta");
+                        // Abrir la ventana del menú principal
+                        MenuPrincipal mp = new MenuPrincipal();
+                        mp.setVisible(true);
                     }
+                } catch (MessagingException ex) {
+                    Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
                 }
-
             }
         });
 

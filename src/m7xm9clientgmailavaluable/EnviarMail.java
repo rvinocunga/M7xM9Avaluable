@@ -2,19 +2,10 @@ package m7xm9clientgmailavaluable;
 
 import javax.swing.*;
 import java.awt.*;
-import java.util.Properties;
-import javax.mail.Message;
 import javax.mail.MessagingException;
-import javax.mail.Session;
-import javax.mail.Transport;
-import javax.mail.internet.InternetAddress;
-import javax.mail.internet.MimeMessage;
 import javax.swing.border.EmptyBorder;
 
 public class EnviarMail extends JDialog {
-
-    String user = "adam22rvinocunga@inslaferreria.cat";
-    String pwd = "xxx";
 
     private JTextField destinatarioField;
     private JTextField asuntoField;

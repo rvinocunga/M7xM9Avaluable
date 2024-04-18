@@ -1,4 +1,4 @@
-package mailsmtp;
+package pruebas;
 
 import javax.mail.Message;
 import javax.mail.MessagingException;

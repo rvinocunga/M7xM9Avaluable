@@ -3,9 +3,13 @@ package com.mycompany.m7xm9mail;
 import java.awt.Desktop;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Properties;
 import java.util.Scanner;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.mail.*;
 import javax.activation.*;
 import javax.mail.internet.*;
@@ -15,13 +19,16 @@ public class EmailClient {
     private Session session;
     private Store store;
     private String host = "imap.gmail.com"; // Canvia aquesta cadena pel teu servidor IMAP
-    private String username = "adam22rvinocunga@inslaferreria.cat"; // Canvia pel teu correu electrònic
-    private String password = "xxxz"; // Canvia per la teva contrasenya
+    private static String username;// = "adam22rvinocunga@inslaferreria.cat"; // Canvia pel teu correu electrònic
+    private static String password; //= "xxxz"; // Canvia per la teva contrasenya
     String directoryPath = "..\\AdjuntsEmail"; // Definició de la ruta on vols desar els adjunts
 
     //Exemple directoris Enviats numero 15
     // Connectar-se al servidor IMAP
-    public void connect() throws NoSuchProviderException, MessagingException {
+    public boolean connect(String correu, String contrasenya) throws NoSuchProviderException, MessagingException {
+        username = correu;
+        password = contrasenya;
+
         Properties properties = new Properties();
         properties.put("mail.store.protocol", "imaps");
         properties.put("mail.imap.host", host);
@@ -30,8 +37,13 @@ public class EmailClient {
 
         session = Session.getInstance(properties);
         store = session.getStore("imaps");
+
         store.connect(host, username, password);
-        System.out.println("Connectat al servidor IMAP.");
+        if (store.isConnected()) {
+            System.out.println("Connectat al servidor IMAP.");
+            return true;
+        }
+        return false;
     }
 
     // Desconnectar-se del servidor IMAP
@@ -66,19 +78,20 @@ public class EmailClient {
         folder.close(false);
     }
 
-    // Obtenir una llista dels directoris associats al compte de correu
-    public void listFolders() throws MessagingException {
-        if (!store.isConnected()) {
-            throw new IllegalStateException("No estàs connectat. Si us plau, connecta't primer.");
-        }
-
-        Folder defaultFolder = store.getDefaultFolder();
-        Folder[] folders = defaultFolder.list("*");
-        System.out.println("Directoris:");
-        for (Folder folder : folders) {
-            System.out.println(folder.getFullName());
-        }
+    public List<String> listFolders() throws MessagingException {
+    if (!store.isConnected()) {
+        throw new IllegalStateException("No estás conectado. Por favor, conéctate primero.");
     }
+
+    List<String> folderNames = new ArrayList<>();
+    Folder defaultFolder = store.getDefaultFolder();
+    Folder[] folders = defaultFolder.list("*");
+    for (Folder folder : folders) {
+        folderNames.add(folder.getName());
+    }
+    return folderNames;
+}
+
 
     public void printEmailContent(String folderName, int messageNumber) throws MessagingException, IOException {
         Folder folder = store.getFolder(folderName);
@@ -234,10 +247,51 @@ public class EmailClient {
         System.out.println("Correo enviado con éxito.");
     }
 
+    public List<String> listEmailsInFolder(String folderName) throws MessagingException {
+        List<String> emails = new ArrayList<>();
+
+        // Obtener la carpeta específica
+        Folder folder = store.getFolder(folderName);
+        if (folder == null) {
+            throw new MessagingException("La carpeta especificada no existe");
+        }
+
+        try {
+            // Abrir la carpeta en modo de solo lectura
+            folder.open(Folder.READ_ONLY);
+
+            // Obtener los mensajes en la carpeta
+            Message[] messages = folder.getMessages();
+
+            // Iterar sobre los mensajes y obtener su contenido
+            for (Message message : messages) {
+                String subject = message.getSubject();
+                String from = InternetAddress.toString(message.getFrom());
+                String content = message.getContent().toString();
+
+                // Construir un string con la información del correo electrónico
+                String emailInfo = "From: " + from + "\n" +
+                                   "Subject: " + subject + "\n" +
+                                   "Content: " + content + "\n";
+
+                emails.add(emailInfo); // Agregar el correo electrónico a la lista
+            }
+        } catch (IOException ex) {
+            Logger.getLogger(EmailClient.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            // Cerrar la carpeta para liberar recursos
+            if (folder != null && folder.isOpen()) {
+                folder.close(false);
+            }
+        }
+
+        return emails;
+    }
+    
     public static void main(String[] args) {
         EmailClient client = new EmailClient();
         try ( Scanner scanner = new Scanner(System.in)) {
-            client.connect();
+            //client.connect("adam22rvinocunga@inslaferreria.cat", "xxx");
             client.listFolders();
 
             while (true) {
