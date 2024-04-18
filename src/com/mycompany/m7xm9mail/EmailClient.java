@@ -6,17 +6,8 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.Properties;
 import java.util.Scanner;
-import javax.mail.Flags;
-import javax.mail.Folder;
-import javax.mail.Message;
-import javax.mail.MessagingException;
-import javax.mail.Multipart;
-import javax.mail.NoSuchProviderException;
-import javax.mail.Part;
-import javax.mail.Session;
-import javax.mail.Store;
-import javax.mail.internet.MimeBodyPart;
 import javax.mail.*;
+import javax.activation.*;
 import javax.mail.internet.*;
 
 public class EmailClient {
